@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+	<form class="form-login" method="POST">
+		
+		<h2 class="form-login-heading">Welcome Back Friend<br>
+			Won't you sign in?</h2>
+
+<!--"Will redirect page when submit is pushed"-->
+
+	<form action="/login_submit" method="POST">
+		
+		<label>Full Name (first, last):
+			<input type="text" name="fullname">
+		</label>		
+		<br>
+		<br>
+		<label>Email:
+			<input type="text" name="email">
+		</label>	
+		<br>
+		<br>
+		<br>
+		<br>
+		<input type="submit" value="Join my fellow community members!">
+		<br>
+		<br>
+		<br>
+		<br>
+	</form>
+
+	<form action="/signin" method="POST">
+
+		<input type="radio" name="new_user" value="new_user">I'm new and I want to join the community!
+		<br>
+		<br>
+		<input type="submit" value="Join the community">
+	</form>
+
+	
+
+
+
+{% endblock %}
