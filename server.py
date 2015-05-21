@@ -2,12 +2,17 @@ from jinja2 import StrictUndefined
 
 from flask import Flask, render_template, redirect, request, flash, session as browser_session
 #from flask_debugtoolbar import DebugToolbarExtension
+from secrets import amm_chain
+
+
 
 app = Flask(__name__)
 
 app.secret_key = "abc123"
 
 app.jinja_env.undefined = StrictUndefined
+
+amm_search_url= 'https://api.ammado.com/v1/search?apiKey='+amm_chain
 
 @app.route('/')
 def index():
@@ -38,11 +43,22 @@ def signin():
 
 @app.route("/search", methods=['GET'])
 def search():
+	if request.method== "GET":		
+		return render_template("search.html")
+
+	else:
+		keyword= request.form.get('select_form')
+		
+		#if submitting form, go to API to do search
+		search= request.get(amm_search_url+'&keyword='+keyword)
+
+		return render_template('results.html', search=search.text)
+
+@app.route("/donate", methods=['POST'])
+def donate():
 
 
-	return render_template("search.html")
-
-
+	render_template("donate.html")
 
 if __name__ == '__main__':
 

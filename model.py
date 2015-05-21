@@ -14,16 +14,19 @@ class Nonprofit():
 
 	__tablename__ = "nonprofits"
 
-	nonprof_name = db.Column(db.String(50), nullable= False, primary_key=True)
+	beneficiary_name = db.Column(db.String(50), nullable= False, primary_key=True)
+	benficiary_id = db.Column(db.Integer(100), nullable= False)
 	zipcode = db.Column(db.Integer, nullable= False)
-	keyword = db.Column(db.String(50), nullable=False)
-	#nonprofit_id = db.Column(db.Integer, nullable=True)
-
+	city = db.Column(db.String(50), nullable=False)
+	categories = db.Column(db.String(50), nullable=False)
+	strapline = db.Column(db.String(50), nullable= True)
+	country = db.Column(db.String(5) nullable= False)
+	
 	def __repr__(self):
 		""" Provides representation when printed """
 
-		return "<Nonprofit nonprof_name=%s zipcode=%d nonprofit_id=%d>" % (
-			self.nonprof_name, self.zipcode, self.nonprofit_id)
+		return "<Nonprofit beneficiary_name=%s strapline= %s city= %s zipcode=%d categories= %s" % (
+			self.beneficiary_name, self.strapline, self.city, self.zipcode, self.categories )
 
 
 class User():
@@ -39,24 +42,24 @@ class User():
 
 	def __repr__(self):
 
-		return "<User individuals_name=%s email=%s age=%s zipcode=%s>" % (self.individuals_name, self.email, self.zipcode)
+		return "<User user_name=%s email=%s age=%s zipcode=%s>" % (self.user_name, self.email, self.age, self.zipcode)
 
 ##########################################################################################
 
-#def connect_to_db(app):
+def connect_to_db(app):
 #     """Connect the database to our Flask app."""
 
 #     # Configure to use our SQLite database
-#     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ratings.db'
-#     db.app = app
-#     db.init_app(app)
+     app.config[  ] = ' '
+     db.app = app
+     db.init_app(app)
 
 
-# if __name__ == "__main__":
+ if __name__ == "__main__":
 #     # As a convenience, if we run this module interactively, it will leave
 #     # you in a state of being able to work with the database directly.
 
-#     from server import app
-#     connect_to_db(app)
+     from server import app
+     connect_to_db(app)
 #     print "Connected to DB."
 
