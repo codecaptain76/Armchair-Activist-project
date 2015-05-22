@@ -1,19 +1,8 @@
 {% extends 'base.html' %}
 
-	{% block body %}
-		<!doctype html>
-		<html>
-		  <head>
-		    <title>Login</title>
-		    <style>
-		      .urgent {
-		        font-size: 100%;
-		        font-weight: bold;
-		      }
-		    </style>
-		  </head>
+	{% block content %}
 
-		<body>
+
 			<form class="form-login" method="POST">
 				
 				<h2 class="form-login-heading">Welcome Back Friend<br>
@@ -35,7 +24,7 @@
 				<br>
 				<br>
 				<br>
-				<input type="submit" value="returning_user">Join my fellow community members!>
+				<input type="submit" value="returning_user">Join my fellow community members!
 				<br>
 				<br>
 				<br>
@@ -50,8 +39,5 @@
 				<input type="submit" value="Join the community">
 			</form>
 
-		</body>	
-
-		</html>
 
 {% endblock %}

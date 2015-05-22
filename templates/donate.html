@@ -1,3 +1,9 @@
+{% extends 'base.html' %}
+
+	{% block content %}
+
+
+
 <form method="post" action="https://api.ammado.com/v1/donate" accept-charset="utf-8">
 	<div>
 		<label for="donorEmail">Email:</label>
@@ -64,3 +70,6 @@
 		document.getElementById('customAmount').setAttribute('disabled', 'disabled');
 	}
 </script>
+
+
+{% endblock %}

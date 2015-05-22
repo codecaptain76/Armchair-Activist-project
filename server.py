@@ -54,11 +54,11 @@ def search():
 
 		return render_template('results.html', search=search.text)
 
-@app.route("/donate", methods=['POST'])
+@app.route("/donate", methods=['GET'])
 def donate():
 
 
-	render_template("donate.html")
+	return render_template("donate.html")
 
 if __name__ == '__main__':
 
