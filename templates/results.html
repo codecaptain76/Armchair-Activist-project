@@ -4,10 +4,14 @@
 
 
 
-		{% for x in search['results'] %}
+		{% for result in results %}
 			<br>
 			
-			<p>{{x}}</p>
+			<p>{{ result["beneficiaryName"],
+			      result["beneficiaryId"],
+			      result["strapline"],
+						
+						 }}</p>
 		{% endfor %}
 
 
