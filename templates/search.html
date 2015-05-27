@@ -3,10 +3,13 @@
   {% block content %}
   
 
+<form action="/search" method="GET">
 
-
-
-<select>
+<label>
+  <h3>What interests you?</h3>
+  <h6>(Search by keyword)</h6>
+</label>
+<select name="keyword">
   <option value="Animals">Animals</option>
   <option value="ArtsCulture">Arts and Culture</option>
   <option value="ChildYouth">Children and Youth</option>
@@ -24,8 +27,10 @@
   <option value="Religious">Religion</option>
   <option value="SportsLeisure">Sports and Leisure</option>
 </select>
-
+<br>
+<input type="submit" value="Search">
  
+
 
 
 {% endblock %}

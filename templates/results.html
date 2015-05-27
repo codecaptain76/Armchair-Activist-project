@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+	{% block content %}
+
+
+
+		{% for x in search['results'] %}
+			<br>
+			
+			<p>{{x}}</p>
+		{% endfor %}
+
+
+
+	{% endblock %}

@@ -4,6 +4,8 @@ from flask import Flask, render_template, redirect, request, flash, session as b
 #from flask_debugtoolbar import DebugToolbarExtension
 from secrets import amm_chain
 
+import requests
+
 
 
 app = Flask(__name__)
@@ -13,7 +15,6 @@ app.secret_key = "abc123"
 app.jinja_env.undefined = StrictUndefined
 
 amm_search_url= 'https://api.ammado.com/v1/search?apiKey='+amm_chain
-
 @app.route('/')
 def index():
 
@@ -43,16 +44,56 @@ def signin():
 
 @app.route("/search", methods=['GET'])
 def search():
-	if request.method== "GET":		
-		return render_template("search.html")
 
-	else:
-		keyword= request.form.get('select_form')
+	if 'keyword' in request.args:
 		
+		keyword = request.args['keyword']
 		#if submitting form, go to API to do search
-		search= request.get(amm_search_url+'&keyword='+keyword)
+		search= requests.get(amm_search_url+'&keyword='+keyword)
+		print search.json()['results']
+		#make a dictionary of {beneficiary name: benefic_id, ... }
+		#iterate through list, add to my dictionary
 
-		return render_template('results.html', search=search.text)
+		beneficiaryName = request.args["beneficiaryName"]
+		beneficiaryId = request.args["beneficiaryId"]
+		strapline = request.args["strapline"]
+		country = request.args["country"]
+		beneficiaryType = request.args["beneficiaryType"]
+		
+
+	search_info = {'beneficiaryName' : 'beneficiaryId', 
+						'strapline' : [],
+	                    'country' : "US",
+						'beneficiaryType' : 'nonprofit'}
+
+	
+
+
+	#my_dict = []
+		
+	#for keyword in search_info:
+  	#		my_dict.append(keyword)
+
+
+  	#		return my_dict
+  	print search_info
+
+	return render_template("search.html")
+
+  	for k in search.iteritems():
+
+
+			return render_template('results.html', search=search.json(),
+											   beneficiaryName=beneficiaryName,
+										       strapline=strapline,
+										       country=country,
+										       beneficiaryType=beneficiaryType
+										       )
+			#print "Search results are:"('%s, %s, %s, %s,') % (search[beneficiaryName], [strapline],
+			#[country], [beneficiaryType])
+
+	
+
 
 @app.route("/donate", methods=['GET'])
 def donate():
