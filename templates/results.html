@@ -7,11 +7,11 @@
 		{% for result in results %}
 			<br>
 			
-			<p>{{ result["beneficiaryName"],
-			      result["beneficiaryId"],
-			      result["strapline"],
+			<p>{{ result["beneficiaryName"] }}<br>
+			   Id: {{ result["beneficiaryId"] }}<br> 
+			    Motto: {{ result["strapline"] }}
 						
-						 }}</p>
+						 </p>
 		{% endfor %}
 
 
