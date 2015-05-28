@@ -2,15 +2,15 @@
 
 	{% block content %}
 
-
+Your search results are:
 
 		{% for result in results %}
 			<br>
 			
 			<p>{{ result["beneficiaryName"] }}<br>
 			   Id: {{ result["beneficiaryId"] }}<br> 
-			    Motto: {{ result["strapline"] }}
-						
+			    Motto: {{ result["strapline"] }}<br>
+				<a href= '/donate'>Donate</a>		
 						 </p>
 		{% endfor %}
 

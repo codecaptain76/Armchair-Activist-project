@@ -47,71 +47,10 @@ def signin():
 @app.route("/search", methods=['GET'])
 def search():
 
-	# if 'keyword' in request.args:
-		
-	# 	keyword = request.args['keyword']
-	# 	#if submitting form, go to API to do search
-	# 	search= requests.get(amm_search_url+'&keyword='+keyword)
-	# 	# pprint.pprint(search.json())
-	# 	results = search.json()['results']
-	# 	pprint.pprint(results)
-
-	# 	filtered_results = []		
-	# 	for key in results:
-	# 		print results[key]['beneficiaryName']
-	# 		print results[key]['beneficiaryId']
-	# 		print results[key]['strapline']
-	# 		if 'country' in results[key]:
-	# 			if results[key]['country'] == 'US':
-	# 				print results[key]['country']
-	# 		print results[key]['beneficiaryType']
-	# 		filtered_results.append(results[key])
-
-	# 	pprint.pprint(filtered_results)
-
-	# 	return render_template('results.html', results=filtered_results)
-
-
-		#make a dictionary of {beneficiary name: benefic_id, ... }
-		#iterate through list, add to my dictionary
-
-		# beneficiaryName = request.args["beneficiaryName"]
-		# beneficiaryId = request.args["beneficiaryId"]
-		# strapline = request.args["strapline"]
-		# country = request.args["country"]
-		# beneficiaryType = request.args["beneficiaryType"]
-		
-
-	# search_info = {'beneficiaryName' : 'beneficiaryId', 
-	# 					'strapline' : [],
-	#                     'country' : "US",
-	# 					'beneficiaryType' : 'nonprofit'}
-
-	# for keyword in search_info:
-
-
-	#my_dict = {}
-		
-	#for keyword in search_info:
-  	#		my_dict.append(keyword)
-
-
-  	#		return my_dict
-  	# print search_info
+	
 
 	return render_template("search.html")
 
-  	# for k in search.iteritems():
-
-
-			# return render_template('results.html', search=search.json(),
-			# 								   beneficiaryName=beneficiaryName,
-			# 							       strapline=strapline,
-			# 							       country=country,
-			# 							       beneficiaryType=beneficiaryType
-			# 							       )
-			# print "Search results are:"('%s, %s, %s, %s,') % (search[beneficiaryName], [strapline],
-			# [country], [beneficiaryType])
 
 	
 @app.route("/results")
@@ -127,17 +66,38 @@ def results():
 
 		filtered_results = []		
 		for key in results:
-			print str(results[key]['beneficiaryName'])
-			print str(results[key]['beneficiaryId'])
-			print str(results[key]['strapline'])
-			if 'country' in results[key]:
-				if results[key]['country'] == 'US':
-					print str(results[key]['country'])
-			if results[key]['beneficiaryType'] == 'nonprofit':
-				print str(results[key]['beneficiaryType'])
-			filtered_results.append(results[key])
+			if 'currencyCode' in results[key] == 'USD':
 
+				if 'country' in results[key]:
+					if results[key]['country'] == 'US':
+						print str(results[key]['country'])
+					
+
+						if results[key]['beneficiaryType'] == 'nonprofit':
+							print str(results[key]['beneficiaryType'])
+							print str(results[key]['beneficiaryName'])
+							print str(results[key]['beneficiaryId'])
+							print str(results[key]['strapline'])
+
+			filtered_results.append(results[key])
+			
+			if 'country' in filtered_results == '':
+		 		if "beneficiaryType" in filtered_results == '':
+		 			if 'currencyCode' in filtered_results != 'USD':
+
+							filtered_results.remove(str(results[key]['beneficiaryName']),str(results[key]['beneficiaryId']),
+				str(results[key]['strapline']),str(results[key]['country']),str(results[key]['beneficiaryType']))
 		# pprint.pprint(filtered_results)
+		# for key in filtered_results:
+		# 	if 'country' in filtered_results == 'US':
+		# 		if 'beneficiaryType' in filtered_results == 'nonprofit':
+		# 			print filtered_results
+
+		# 		else:
+		# 			if 'country' in filtered_results != 'US':
+		# 				if "beneficiaryType" in filtered_results != 'nonprofit':
+
+		# 					filtered_results.remove(results[key]) 
 
 		return render_template('results.html', results=filtered_results)
 
@@ -148,6 +108,17 @@ def donate():
 
 	return render_template("donate.html")
 
+@app.route("/volunteer", methods=['GET'])
+def volunteer():
+
+
+	return render_template("volunteer.html")
+
+@app.route("/volunteer_results" methods=['GET'])
+def volunteer_results():
+
+
+return render_template("volunteer_results.html")	
 if __name__ == '__main__':
 
 
