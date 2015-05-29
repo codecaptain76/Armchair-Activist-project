@@ -8,9 +8,8 @@ Your search results are:
 			<br>
 			
 			<p>{{ result["beneficiaryName"] }}<br>
-			   Id: {{ result["beneficiaryId"] }}<br> 
 			    Motto: {{ result["strapline"] }}<br>
-				<a href= '/donate'>Donate</a>		
+				<a href= {{ result["permalink"]}}>More Info</a>		
 						 </p>
 		{% endfor %}
 

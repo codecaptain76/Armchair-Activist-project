@@ -2,7 +2,7 @@ from jinja2 import StrictUndefined
 
 from flask import Flask, render_template, redirect, request, flash, session as browser_session
 #from flask_debugtoolbar import DebugToolbarExtension
-from secrets import amm_chain
+from secrets import amm_chain, all_chain
 import pprint
 
 import requests
@@ -17,6 +17,7 @@ app.secret_key = "abc123"
 app.jinja_env.undefined = StrictUndefined
 
 amm_search_url= 'https://api.ammado.com/v1/search?apiKey='+amm_chain
+all_search_url= 'http://api2.allforgood.org/api/volopps?key='+all_chain
 @app.route('/')
 def index():
 
@@ -110,15 +111,63 @@ def donate():
 
 @app.route("/volunteer", methods=['GET'])
 def volunteer():
-
-
+	
 	return render_template("volunteer.html")
 
-@app.route("/volunteer_results" methods=['GET'])
+@app.route("/volunteer_results")
 def volunteer_results():
+	filtered_volresults = []
+
+	if 'category' in request.args:
+		
+		category= request.args['category']
+		#if submitting form, go to API to do search
+		find= requests.get(all_search_url+'&q='+category+'output=json')
+		# pprint.pprint(search.json())
+		querys= find.json()['querys']
+		# pprint.pprint(results)
+
+				
+		
+		print str(querys[key]['title'])
+		print str(querys[key]['description'])
+		print str(querys[key]['startDate'])
+		print str(querys[key]['endDate'])
+		print str(querys[key]['contactPhone'])
+		print str(querys[key]['contactName'])
+		print str(querys[key]['contactEmail'])
+		print str(querys[key]['locationName'])
+
+		filtered_volresults.append(querys[key])
+
+	return render_template("volunteer_results.html", querys=filtered_volresults)
+
+@app.route('/zip_results')
+def zipcode_results():
+	if zipcode in request.args:
+
+		zipcode = request.args['postalCode']
+
+		retrieve = requests.get(all_search_url+'&vol_loc='+zipcode+'&distance=25&category=&sort=&type=')
+
+		answers = retrieve.json()['answers']
+		
+		zip_results=[]
+
+		print str(retrieve[key]['title'])
+		print str(retrieve[key]['description'])
+		print str(retrieve[key]['startDate'])
+		print str(retrieve[key]['endDate'])
+		print str(retrieve[key]['contactPhone'])
+		print str(retrieve[key]['contactName'])
+		print str(retrieve[key]['contactEmail'])
+		print str(retrieve[key]['locationName'])
+
+		zip_results.append(retrieve[key])	
+
+	return render_template("volunteer_results.html", querys= zip_results)
 
 
-return render_template("volunteer_results.html")	
 if __name__ == '__main__':
 
 
