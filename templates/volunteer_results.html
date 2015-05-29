@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+	{% block content %}
+
+Your search results are:
+
+		{% for query in querys %}
+			<br>
+			
+			<p>{{ query["title"] }}<br>
+			   {{ query["description"] }}<br> 
+			   {{ query["startDate"] }}<br>
+			   {{ query["endDate"] }}
+				<a href={{query["xml_url"]}}>Give my time</a>		
+						 </p>
+		{% endfor %}
+
+
+
+	{% endblock %}

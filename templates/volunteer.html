@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+	{% block content %}
+
+<form action="/volunteer_results" method="GET">
+
+<label>
+  <h3>Where would you like to spend time?</h3>
+  <h6>(Search by keyword or zipcode)</h6>
+</label>
+<select name="keyword">
+  <option value="Animals">Animals</option>
+  <option value="Arts & Culture">Arts and Culture</option>
+  <option value="Children & Youth Education">Children and Youth</option>
+  <option value="Civic & Community">Community Services</option>
+  <option value="Environment">Environment</option>
+  <option value="Faith-Based Service">Religion</option>
+  <option value="Health & Wellness">Health & Wellness</option>
+  <option value="Hunger & Homelessness">Hunger & Homelessness</option>
+  <option value="International Service">International Service</option>
+  <option value="Schools">Schools</option>
+  <option value="Senior Services">Senior Services</option>
+  <option value="Sports & Recreation">Sports & Recreation</option>
+  <option value="Internships & Employment">Internships & Employment</option>
+  <option value="Other">Other</option>
+</select>
+<br>
+<input type="submit" value="Find opportunities near me">
+</form>
+<br>
+<form action="/zip_results" method="GET">
+
+<h6>zipcode:</h6><input type='text' name='zipcode'>
+<input type="submit" value="Find opportunities near me">
+
+
+</form>
+
+
+
+	{% endblock %}
