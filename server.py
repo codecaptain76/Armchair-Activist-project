@@ -8,7 +8,7 @@ import pprint
 import requests
 
 import json
-
+import logging
 
 app = Flask(__name__)
 
@@ -116,35 +116,32 @@ def volunteer():
 
 @app.route("/volunteer_results")
 def volunteer_results():
+	app.logger.info(request.args)
 	filtered_volresults = []
+
 
 	if 'category' in request.args:
 		
 		category= request.args['category']
+		
 		#if submitting form, go to API to do search
-		find= requests.get(all_search_url+'&q='+category+'output=json')
+		find= requests.get(all_search_url+'&q='+category+'&vol_loc=94105&output=json')
+		app.logger.info(find.json())
 		# pprint.pprint(search.json())
-		querys= find.json()['querys']
+		items= find.json()['items']
 		# pprint.pprint(results)
-
+		
 				
 		
-		print str(querys[key]['title'])
-		print str(querys[key]['description'])
-		print str(querys[key]['startDate'])
-		print str(querys[key]['endDate'])
-		print str(querys[key]['contactPhone'])
-		print str(querys[key]['contactName'])
-		print str(querys[key]['contactEmail'])
-		print str(querys[key]['locationName'])
 
-		filtered_volresults.append(querys[key])
+	
+		
 
-	return render_template("volunteer_results.html", querys=filtered_volresults)
+	return render_template("volunteer_results.html", querys=items)
 
 @app.route('/zip_results')
 def zipcode_results():
-	if zipcode in request.args:
+	if 'zipcode' in request.args:
 
 		zipcode = request.args['postalCode']
 
