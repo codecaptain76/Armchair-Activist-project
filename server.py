@@ -16,6 +16,7 @@ app.secret_key = "abc123"
 
 app.jinja_env.undefined = StrictUndefined
 
+
 amm_search_url= 'https://api.ammado.com/v1/search?apiKey='+amm_chain
 all_search_url= 'http://api2.allforgood.org/api/volopps?key='+all_chain
 @app.route('/')
@@ -56,6 +57,8 @@ def search():
 	
 @app.route("/results")
 def results():
+
+	
 	if 'keyword' in request.args:
 		
 		keyword = request.args['keyword']
@@ -116,53 +119,51 @@ def volunteer():
 
 @app.route("/volunteer_results")
 def volunteer_results():
-	app.logger.info(request.args)
-	filtered_volresults = []
-
 
 	if 'category' in request.args:
-		
-		category= request.args['category']
-		
-		#if submitting form, go to API to do search
-		find= requests.get(all_search_url+'&q='+category+'&vol_loc=94105&output=json')
-		app.logger.info(find.json())
-		# pprint.pprint(search.json())
-		items= find.json()['items']
-		# pprint.pprint(results)
-		
+		if 'zipcode' in request.args:
 				
+			category = request.args['category']
+			zipcode = request.args['zipcode']
+			#if submitting form, go to API to do search
+			find = requests.get(all_search_url+'&q='+category+'&vol_loc='+zipcode+'&distance=15')
+			#app.logger.info('hello')
+			# pprint.pprint(search.json())
+			items = find.json()['items']
+			# pprint.pprint(results)
+			#app.logger.info(request.args)
+			combo_results = []
+
+			for item in items:
+				combo_results.append(item)
+				
+
+			return render_template("volunteer_results.html", querys=combo_results)
+
+#@app.route('/zip_results')
+#def zipcode_results():
+	# if 'zipcode' in request.args:
+
+	# 	zipcode = request.args['postalCode']
+
+	# 	retrieve = requests.get(all_search_url+'&vol_loc='+zipcode+'&distance=25&category=&sort=&type=')
+
+	# 	answers = retrieve.json()['answers']
 		
+	# 	zip_results=[]
 
-	
-		
+	# 	print str(retrieve[key]['title'])
+	# 	print str(retrieve[key]['description'])
+	# 	print str(retrieve[key]['startDate'])
+	# 	print str(retrieve[key]['endDate'])
+	# 	print str(retrieve[key]['contactPhone'])
+	# 	print str(retrieve[key]['contactName'])
+	# 	print str(retrieve[key]['contactEmail'])
+	# 	print str(retrieve[key]['locationName'])
 
-	return render_template("volunteer_results.html", querys=items)
+	# 	zip_results.append(retrieve[key])	
 
-@app.route('/zip_results')
-def zipcode_results():
-	if 'zipcode' in request.args:
-
-		zipcode = request.args['postalCode']
-
-		retrieve = requests.get(all_search_url+'&vol_loc='+zipcode+'&distance=25&category=&sort=&type=')
-
-		answers = retrieve.json()['answers']
-		
-		zip_results=[]
-
-		print str(retrieve[key]['title'])
-		print str(retrieve[key]['description'])
-		print str(retrieve[key]['startDate'])
-		print str(retrieve[key]['endDate'])
-		print str(retrieve[key]['contactPhone'])
-		print str(retrieve[key]['contactName'])
-		print str(retrieve[key]['contactEmail'])
-		print str(retrieve[key]['locationName'])
-
-		zip_results.append(retrieve[key])	
-
-	return render_template("volunteer_results.html", querys= zip_results)
+	# return render_template("volunteer_results.html", querys= zip_results)
 
 
 if __name__ == '__main__':
