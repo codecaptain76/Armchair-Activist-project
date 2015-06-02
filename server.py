@@ -10,6 +10,10 @@ import requests
 import json
 import logging
 
+import getpass
+
+from model import User, connect_to_db, db
+
 app = Flask(__name__)
 
 app.secret_key = "abc123"
@@ -28,23 +32,58 @@ def index():
 
 @app.route("/login", methods=['GET'])
 def login():
-
-
+	
 	return render_template("login.html")
+	
+	# email = raw_input("Email:")
+	# password = getpass.getpass("Password:")
 
 
-@app.route("/login_submit", methods=['POST'])
+@app.route("/login", methods=['POST'])
 def login_submit():
+	email = request.form["email"]
+	password = request.form["password"]
 
+	user = User.query.filter_by(email=email).first()
+
+	if not user:
+	    flash("We can't seem to locate you. Please try again or Sign In.")
+    	return redirect("/login")
+
+	if user.password != password:
+		flash("Incorrect password. Please try again.")
+        return redirect("/login")
+
+	session["user_id"] = user.user_id
+
+	flash("%s was been logged in" % email)
 
 	return render_template("login_submit.html")
 
 
-@app.route("/signin", methods=['POST'])
+@app.route("/signin", methods=['GET'])
 def signin():
 
 
 	return render_template("signin.html")
+
+
+@app.route("/signin", methods=['POST'])
+def signin_submit():
+	username = request.form["username"]
+	email = request.form["email"]
+	password = request.form["password"]
+	age = request.form["age"]
+	zipcode = request.form["zipcode"]
+	
+	user = User(username=username, email=email, password=password, age=age, zipcode=zipcode)
+	db.session.add(user)
+ 	db.session.commit()
+
+ 	flash("%s, has been added to the family." % username)
+	
+	return render_template("login_submit.html")
+
 
 @app.route("/search", methods=['GET'])
 def search():
@@ -140,30 +179,30 @@ def volunteer_results():
 
 			return render_template("volunteer_results.html", querys=combo_results)
 
-#@app.route('/zip_results')
-#def zipcode_results():
-	# if 'zipcode' in request.args:
+@app.route('/zip_results')
+def zipcode_results():
+	if 'zipcode' in request.args:
 
-	# 	zipcode = request.args['postalCode']
+		zipcode = request.args['postalCode']
 
-	# 	retrieve = requests.get(all_search_url+'&vol_loc='+zipcode+'&distance=25&category=&sort=&type=')
+		retrieve = requests.get(all_search_url+'&vol_loc='+zipcode+'&distance=25&category=&sort=&type=')
 
-	# 	answers = retrieve.json()['answers']
+		answers = retrieve.json()['answers']
 		
-	# 	zip_results=[]
+		zip_results=[]
 
-	# 	print str(retrieve[key]['title'])
-	# 	print str(retrieve[key]['description'])
-	# 	print str(retrieve[key]['startDate'])
-	# 	print str(retrieve[key]['endDate'])
-	# 	print str(retrieve[key]['contactPhone'])
-	# 	print str(retrieve[key]['contactName'])
-	# 	print str(retrieve[key]['contactEmail'])
-	# 	print str(retrieve[key]['locationName'])
+		print str(retrieve[key]['title'])
+		print str(retrieve[key]['description'])
+		print str(retrieve[key]['startDate'])
+		print str(retrieve[key]['endDate'])
+		print str(retrieve[key]['contactPhone'])
+		print str(retrieve[key]['contactName'])
+		print str(retrieve[key]['contactEmail'])
+		print str(retrieve[key]['locationName'])
 
-	# 	zip_results.append(retrieve[key])	
+		zip_results.append(retrieve[key])	
 
-	# return render_template("volunteer_results.html", querys= zip_results)
+	return render_template("volunteer_results.html", querys= zip_results)
 
 
 if __name__ == '__main__':
@@ -172,5 +211,5 @@ if __name__ == '__main__':
 	app.debug = True
 
 	#DebugToolbarExtension(app)
-
+	connect_to_db(app)
 	app.run()

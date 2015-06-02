@@ -32,25 +32,25 @@ def load_users():
     db.session.commit()
 
 
-def load_nonprofits():
+# def load_nonprofits():
 
-    print "nonprofits"
+#     print "nonprofits"
 
-    for i, row in enumerate(open(" ")):
-        row = row.rstrip()
+#     for i, row in enumerate(open(" ")):
+#         row = row.rstrip()
 
-        beneficiary_name, benficiary_id, zipcode, city, 
-        categories, strapline, country = row.split("|")
+#         beneficiary_name, benficiary_id, zipcode, city, 
+#         categories, strapline, country = row.split("|")
 
-        nonprofit = Nonprofit( beneficiary_name= beneficiary_name
-                               benficiary_id= benficiary_id
-                               zipcode= zipcode
-                               city= city 
-                               categories= categories
-                               strapline= strapline)
+#         nonprofit = Nonprofit( beneficiary_name= beneficiary_name
+#                                benficiary_id= benficiary_id
+#                                zipcode= zipcode
+#                                city= city 
+#                                categories= categories
+#                                strapline= strapline)
 
-        # We need to add to the session or it won't ever be stored
-        db.session.add(nonprofit)
+#         # We need to add to the session or it won't ever be stored
+#         db.session.add(nonprofit)
 
 
     

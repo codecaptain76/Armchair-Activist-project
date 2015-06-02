@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+	{% block content %}
+
+			<!-- <form class="form-signin" method="POST"> -->
+				
+<!-- 				<h2 class="form-signin-heading">Welcome New Friend</h2> -->
+				<h3>Who are you?</h3>
+
+		<!--"Will redirect page when submit is pushed"-->
+
+			<form action="/signin" method="POST">
+
+				<label>Username:
+					<input type="text" name="username">	
+				</label>
+				<br>
+				<br>
+				<label>Email:
+					<input type= "text" name="email">
+				</label>	
+				<br>
+				<br>
+				<label>Password:
+					<input type= "text" name="password">
+				</label>	
+				<br>
+				<br>
+				<label>Age:
+					<input type= "text" name="age">
+				</label>
+				<br>
+				<br>
+				<label>Zipcode:
+					<input type="text" name="zipcode">
+				</label>
+				<br>
+				<br>
+				<input type="submit" value="Join the community!">
+				<br>
+				<br>
+				<br>
+				<br>
+			</form>
+
+{% endblock %}
