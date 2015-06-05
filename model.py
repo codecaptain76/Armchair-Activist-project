@@ -8,26 +8,27 @@ from flask.ext.login import UserMixin
 
 ##############################################################################
 
-# Model definitions- Tables for holding info
+#Model definitions- Tables for holding info
 #db.API
-# class Nonprofit():
-# 	""" Searchable nonprofits"""
+class Nonprofit(db.Model):
+	""" Searchable nonprofits"""
 
-# 	__tablename__ = "nonprofits"
-
-# 	beneficiary_name = db.Column(db.String(50), nullable= False, primary_key=True)
-# 	benficiary_id = db.Column(db.Integer(100), nullable= False)
-# 	zipcode = db.Column(db.Integer, nullable= False)
-# 	city = db.Column(db.String(50), nullable=False)
-# 	categories = db.Column(db.String(50), nullable=False)
-# 	strapline = db.Column(db.String(50), nullable= True)
-# 	country = db.Column(db.String(5) nullable= False)
+	__tablename__ = "nonprofits"
+	id = db.Column("nonprofit_id", db.Integer, autoincrement=True, primary_key=True)
+	beneficiary_name = db.Column(db.String(50), nullable= False)
+	beneficiary_id = db.Column(db.Integer, nullable= False)
+	zipcode = db.Column(db.Integer, nullable= True)
+	city = db.Column(db.String(50), nullable=True)
+	categories = db.Column(db.String(50), nullable=False)
+	strapline = db.Column(db.String(50), nullable= True)
+	country = db.Column(db.String(5), nullable= False)
+	user_id = db.Column(db.Integer, nullable=False)
 	
-# 	def __repr__(self):
-# 		""" Provides representation when printed """
+	def __repr__(self):
+		""" Provides representation when printed """
 
-# 		return "<Nonprofit beneficiary_name=%s strapline= %s city= %s zipcode=%d categories= %s" % (
-# 			self.beneficiary_name, self.strapline, self.city, self.zipcode, self.categories )
+		return "<Nonprofit beneficiary_name=%s strapline= %s city= %s zipcode=%d categories= %s" % (
+			self.beneficiary_name, self.strapline, self.city, self.zipcode, self.categories )
 
 
 class User(db.Model, UserMixin):
@@ -40,7 +41,8 @@ class User(db.Model, UserMixin):
 	password = db.Column(db.String(50), nullable=False)
 	age = db.Column(db.Integer, nullable=True)
 	zipcode = db.Column(db.Integer, nullable=False)
-
+	
+	
 	def __repr__(self):
 
 		return "<User username=%s email=%s age=%s zipcode=%s>" % (self.username, self.email, self.age, self.zipcode)

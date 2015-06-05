@@ -9,8 +9,14 @@ Your search results are:
 			
 			<p>{{ result["beneficiaryName"] }}<br>
 			    Motto: {{ result["strapline"] }}<br>
-				<a href= {{ result["permalink"]}}>More Info</a>		
-						 </p>
+			<form action="/nonprofit_click" method="POST">
+				<input type="hidden" name="beneficiaryName" value={{ result["beneficiaryName"] }}>
+				<input type= "hidden" name="categories" value={{ result['categories']}}>
+				<input type= "hidden" name="permalink" value={{ result["permalink"] }}>
+				<input type= "hidden" name="beneficiaryId" value={{ result["beneficiaryId"] }}>
+				<input type= "hidden" name="strapline" value={{ result["strapline"] }}>
+				<input type="submit" value="More Info">
+			</form>
 		{% endfor %}
 
 

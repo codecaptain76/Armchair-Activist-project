@@ -8,11 +8,9 @@ import pprint
 import requests
 
 import json
-import logging
 
-import getpass
 
-from model import User, connect_to_db, db
+from model import User, Nonprofit, connect_to_db, db
 
 from flask.ext.login import LoginManager
 from flask.ext.login import login_user
@@ -35,8 +33,36 @@ all_search_url= 'http://api2.allforgood.org/api/volopps?key='+all_chain
 	
 @app.route('/')
 def index():
+
 	return render_template("homepage.html")
 
+
+
+@app.route("/nonprofit_click", methods=['POST'])
+def nonprofit_click():
+
+	beneficiaryName = request.form['beneficiaryName']
+	categories = request.form['categories']
+	beneficiaryId = request.form['beneficiaryId']
+	strapline = request.form['strapline']
+
+	# get permalink
+	#if 'permalink' in request.form:
+
+	permalink = request.form['permalink']
+	nonprofit = Nonprofit(beneficiary_name=beneficiaryName, 
+		categories=categories,
+		beneficiary_id=beneficiaryId,
+		strapline=strapline) 
+		#user_id=browser_session["user_id"])
+	# store the nonprofit into the database
+	db.session.add(nonprofit)
+	db.session.commit()
+
+	# browser_session["user_id"] = user.id
+	# login_user(user)
+	# redirect to the permalink
+	return redirect(permalink)
 
 @app.route("/login", methods=['GET'])
 def login():
@@ -47,8 +73,7 @@ def login():
 	return render_template("login.html")
 	
 		
-	# email = raw_input("Email:")
-	# password = getpass.getpass("Password:")
+	
 
 
 @app.route("/login", methods=['POST'])
@@ -56,19 +81,19 @@ def login_submit():
 	email = request.form["email"]
 	password = request.form["password"]
 
-	error = None
+
 	# form = LoginForm(request.form)
 
 	# if form.validate_on_submit():
 	user = User.query.filter_by(email=request.form['email']).first()
 
 	if not user:
-	    flash("We can't seem to locate you. Please try again or Sign In.")
-    	return redirect("/login")
+		flash("We can't seem to locate you. Please try again or Sign In.")
+		return redirect("/login")
 
 	if user.password != password:
 		flash("Incorrect password. Please try again.")
-        return redirect("/login")
+		return redirect("/login")
 
 
 	browser_session["user_id"] = user.id
@@ -78,14 +103,14 @@ def login_submit():
 	return render_template("login_submit.html")
 
 
-@app.route("/signin", methods=['GET'])
+@app.route("/signup", methods=['GET'])
 def signin():
 
 
 	return render_template("signin.html")
 
 
-@app.route("/signin", methods=['POST'])
+@app.route("/signup", methods=['POST'])
 def signin_submit():
 	username = request.form["username"]
 	email = request.form["email"]
@@ -112,8 +137,6 @@ def search():
 
 	return render_template("search.html")
 
-
-	
 @app.route("/results")
 def results():
 
@@ -123,44 +146,27 @@ def results():
 		keyword = request.args['keyword']
 		#if submitting form, go to API to do search
 		search= requests.get(amm_search_url+'&keyword='+keyword)
-		# pprint.pprint(search.json())
+		
 		results = search.json()['results']
-		# pprint.pprint(results)
+	
 
-		filtered_results = []		
+		filtered_results = []
 		for key in results:
-			if 'currencyCode' in results[key] == 'USD':
-
-				if 'country' in results[key]:
-					if results[key]['country'] == 'US':
-						print str(results[key]['country'])
-					
-
-						if results[key]['beneficiaryType'] == 'nonprofit':
-							print str(results[key]['beneficiaryType'])
-							print str(results[key]['beneficiaryName'])
-							print str(results[key]['beneficiaryId'])
-							print str(results[key]['strapline'])
-
-			filtered_results.append(results[key])
+			result= results[key]
+			append = True
+			if 'currencyCode' in result:
+				if result['currencyCode'] != 'USD':
+					append = False
+			if 'country' in result:
+				if result['country'] !='US':
+					append = False
+			if 'beneficiaryType' in result:
+				if result['beneficiaryType'] != 'nonprofit':
+					append = False
+			if append:
+				filtered_results.append(results[key])
 			
-			if 'country' in filtered_results == '':
-		 		if "beneficiaryType" in filtered_results == '':
-		 			if 'currencyCode' in filtered_results != 'USD':
-
-							filtered_results.remove(str(results[key]['beneficiaryName']),str(results[key]['beneficiaryId']),
-				str(results[key]['strapline']),str(results[key]['country']),str(results[key]['beneficiaryType']))
-		# pprint.pprint(filtered_results)
-		# for key in filtered_results:
-		# 	if 'country' in filtered_results == 'US':
-		# 		if 'beneficiaryType' in filtered_results == 'nonprofit':
-		# 			print filtered_results
-
-		# 		else:
-		# 			if 'country' in filtered_results != 'US':
-		# 				if "beneficiaryType" in filtered_results != 'nonprofit':
-
-		# 					filtered_results.remove(results[key]) 
+		
 
 		return render_template('results.html', results=filtered_results)
 
