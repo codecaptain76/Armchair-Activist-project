@@ -17,6 +17,7 @@ from model import User, connect_to_db, db
 from flask.ext.login import LoginManager
 from flask.ext.login import login_user
 
+from datetime import datetime
 
 
 app = Flask(__name__)
@@ -191,6 +192,12 @@ def volunteer_results():
 			combo_results = []
 
 			for item in items:
+				start = datetime.strptime(item['startDate'], '%Y-%m-%d %X')
+				start_time = datetime.strftime(start, '%B %d, %Y %I:%M %p')
+				item['startDate'] = start_time
+				end = datetime.strptime(item['endDate'], '%Y-%m-%d %X')
+				end_time = datetime.strftime(end, '%B %d, %Y %I:%M %p')
+				item['endDate'] = end_time
 				combo_results.append(item)
 				
 
