@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+from flask.ext.login import UserMixin
 
 ##############################################################################
 
@@ -29,11 +30,11 @@ db = SQLAlchemy()
 # 			self.beneficiary_name, self.strapline, self.city, self.zipcode, self.categories )
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
 
 	__tablename__ = "users"
 
-	user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+	id = db.Column("user_id", db.Integer, autoincrement=True, primary_key=True)
 	username = db.Column(db.String(50), nullable=False)
 	email = db.Column(db.String(50), nullable=False)
 	password = db.Column(db.String(50), nullable=False)

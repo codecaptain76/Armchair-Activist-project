@@ -14,27 +14,38 @@ import getpass
 
 from model import User, connect_to_db, db
 
+from flask.ext.login import LoginManager
+from flask.ext.login import login_user
+
+
+
 app = Flask(__name__)
-
 app.secret_key = "abc123"
-
 app.jinja_env.undefined = StrictUndefined
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+login_manager.login_view = "users.login"
 
 amm_search_url= 'https://api.ammado.com/v1/search?apiKey='+amm_chain
 all_search_url= 'http://api2.allforgood.org/api/volopps?key='+all_chain
+
+	
 @app.route('/')
 def index():
-
-
 	return render_template("homepage.html")
 
 
 @app.route("/login", methods=['GET'])
 def login():
-	
+
+	if request.args.get('email'):
+		session['email'] = request.args.get('email')
+
 	return render_template("login.html")
 	
+		
 	# email = raw_input("Email:")
 	# password = getpass.getpass("Password:")
 
@@ -44,7 +55,11 @@ def login_submit():
 	email = request.form["email"]
 	password = request.form["password"]
 
-	user = User.query.filter_by(email=email).first()
+	error = None
+	# form = LoginForm(request.form)
+
+	# if form.validate_on_submit():
+	user = User.query.filter_by(email=request.form['email']).first()
 
 	if not user:
 	    flash("We can't seem to locate you. Please try again or Sign In.")
@@ -54,9 +69,10 @@ def login_submit():
 		flash("Incorrect password. Please try again.")
         return redirect("/login")
 
-	session["user_id"] = user.user_id
 
-	flash("%s was been logged in" % email)
+	browser_session["user_id"] = user.id
+	login_user(user)
+	flash("%s has been logged in" % email)
 
 	return render_template("login_submit.html")
 
@@ -73,16 +89,19 @@ def signin_submit():
 	username = request.form["username"]
 	email = request.form["email"]
 	password = request.form["password"]
-	age = request.form["age"]
+	age = int(request.form["age"])
 	zipcode = request.form["zipcode"]
 	
 	user = User(username=username, email=email, password=password, age=age, zipcode=zipcode)
 	db.session.add(user)
  	db.session.commit()
 
+ 	browser_session["user_id"] = user.id
+	login_user(user)
+
  	flash("%s, has been added to the family." % username)
 	
-	return render_template("login_submit.html")
+	return render_template("login_submit.html", user=user)
 
 
 @app.route("/search", methods=['GET'])
@@ -166,11 +185,9 @@ def volunteer_results():
 			zipcode = request.args['zipcode']
 			#if submitting form, go to API to do search
 			find = requests.get(all_search_url+'&q='+category+'&vol_loc='+zipcode+'&distance=15')
-			#app.logger.info('hello')
-			# pprint.pprint(search.json())
+			
 			items = find.json()['items']
-			# pprint.pprint(results)
-			#app.logger.info(request.args)
+			
 			combo_results = []
 
 			for item in items:
@@ -204,6 +221,21 @@ def zipcode_results():
 
 	return render_template("volunteer_results.html", querys= zip_results)
 
+@app.route('/logout')
+def logout():
+
+	del session["user_id"]
+	flash ("Logout successful")
+
+	return redirect("/")
+
+
+@login_manager.user_loader
+def load_user(userid):
+    return User.query.get(userid)
+
+
+
 
 if __name__ == '__main__':
 
@@ -212,4 +244,6 @@ if __name__ == '__main__':
 
 	#DebugToolbarExtension(app)
 	connect_to_db(app)
+
+
 	app.run()
