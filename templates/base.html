@@ -24,6 +24,10 @@
   	<h1>Armchair Activist<h1>
   	<h2>Welcome to the family<h2>
 
+  		{% for flash in get_flashed_messages() %}
+		{{ flash }}
+		{% endfor %}
+		 
 	{% block content %}
 
     {% endblock %}	

@@ -13,7 +13,7 @@ import json
 from model import User, Nonprofit, connect_to_db, db
 
 from flask.ext.login import LoginManager
-from flask.ext.login import login_user
+from flask.ext.login import login_user, login_required, current_user
 
 from datetime import datetime
 
@@ -42,26 +42,29 @@ def index():
 def nonprofit_click():
 
 	beneficiaryName = request.form['beneficiaryName']
-	categories = request.form['categories']
+	categories = request.form['categories'][3:-2]
 	beneficiaryId = request.form['beneficiaryId']
 	strapline = request.form['strapline']
-
+	country = request.form['country']
 	# get permalink
 	#if 'permalink' in request.form:
-
 	permalink = request.form['permalink']
+
+	user_id=browser_session["user_id"]
 	nonprofit = Nonprofit(beneficiary_name=beneficiaryName, 
 		categories=categories,
 		beneficiary_id=beneficiaryId,
-		strapline=strapline) 
-		#user_id=browser_session["user_id"])
+		strapline=strapline,
+		country=country,
+		user_id=user_id) 
+		
 	# store the nonprofit into the database
 	db.session.add(nonprofit)
 	db.session.commit()
 
 	# browser_session["user_id"] = user.id
 	# login_user(user)
-	# redirect to the permalink
+	#redirect to the permalink
 	return redirect(permalink)
 
 @app.route("/login", methods=['GET'])
@@ -81,10 +84,10 @@ def login_submit():
 	email = request.form["email"]
 	password = request.form["password"]
 
+	print email
+	print password
 
-	# form = LoginForm(request.form)
 
-	# if form.validate_on_submit():
 	user = User.query.filter_by(email=request.form['email']).first()
 
 	if not user:
@@ -96,9 +99,13 @@ def login_submit():
 		return redirect("/login")
 
 
-	browser_session["user_id"] = user.id
+	browser_session["user_id"] = user.user_id
 	login_user(user)
 	flash("%s has been logged in" % email)
+
+	nonprofit_list=Nonprofit.query.filter_by(user_id=user.user_id).all()
+	
+	print nonprofit_list
 
 	return render_template("login_submit.html")
 
@@ -122,7 +129,7 @@ def signin_submit():
 	db.session.add(user)
  	db.session.commit()
 
- 	browser_session["user_id"] = user.id
+ 	browser_session["user_id"] = user.user_id
 	login_user(user)
 
  	flash("%s, has been added to the family." % username)
@@ -131,6 +138,7 @@ def signin_submit():
 
 
 @app.route("/search", methods=['GET'])
+@login_required
 def search():
 
 	
@@ -166,16 +174,16 @@ def results():
 			if append:
 				filtered_results.append(results[key])
 			
-		
+		user_searches = current_user.nonprofits
 
-		return render_template('results.html', results=filtered_results)
-
-
-@app.route("/donate", methods=['GET'])
-def donate():
+		return render_template('results.html', results=filtered_results, user_searches=user_searches)
 
 
-	return render_template("donate.html")
+# @app.route("/donate", methods=['GET'])
+# def donate():
+
+
+# 	return render_template("donate.html")
 
 @app.route("/volunteer", methods=['GET'])
 def volunteer():
@@ -209,35 +217,35 @@ def volunteer_results():
 
 			return render_template("volunteer_results.html", querys=combo_results)
 
-@app.route('/zip_results')
-def zipcode_results():
-	if 'zipcode' in request.args:
+# @app.route('/zip_results')
+# def zipcode_results():
+# 	if 'zipcode' in request.args:
 
-		zipcode = request.args['postalCode']
+# 		zipcode = request.args['postalCode']
 
-		retrieve = requests.get(all_search_url+'&vol_loc='+zipcode+'&distance=25&category=&sort=&type=')
+# 		retrieve = requests.get(all_search_url+'&vol_loc='+zipcode+'&distance=25&category=&sort=&type=')
 
-		answers = retrieve.json()['answers']
+# 		answers = retrieve.json()['answers']
 		
-		zip_results=[]
+# 		zip_results=[]
 
-		print str(retrieve[key]['title'])
-		print str(retrieve[key]['description'])
-		print str(retrieve[key]['startDate'])
-		print str(retrieve[key]['endDate'])
-		print str(retrieve[key]['contactPhone'])
-		print str(retrieve[key]['contactName'])
-		print str(retrieve[key]['contactEmail'])
-		print str(retrieve[key]['locationName'])
+# 		print str(retrieve[key]['title'])
+# 		print str(retrieve[key]['description'])
+# 		print str(retrieve[key]['startDate'])
+# 		print str(retrieve[key]['endDate'])
+# 		print str(retrieve[key]['contactPhone'])
+# 		print str(retrieve[key]['contactName'])
+# 		print str(retrieve[key]['contactEmail'])
+# 		print str(retrieve[key]['locationName'])
 
-		zip_results.append(retrieve[key])	
+# 		zip_results.append(retrieve[key])	
 
-	return render_template("volunteer_results.html", querys= zip_results)
+# 	return render_template("volunteer_results.html", querys= zip_results)
 
 @app.route('/logout')
 def logout():
 
-	del session["user_id"]
+	del browser_session["user_id"]
 	flash ("Logout successful")
 
 	return redirect("/")
@@ -245,7 +253,7 @@ def logout():
 
 @login_manager.user_loader
 def load_user(userid):
-    return User.query.get(userid)
+	return User.query.get(userid)
 
 
 

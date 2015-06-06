@@ -1,7 +1,14 @@
 {% extends 'base.html' %}
 
 	{% block content %}
-
+<form action="/login" method="GET">
+	<input type="submit" value="Account page">
+</form>
+<form action="/logout" method="GET">
+	<input type="submit" value="Log Out">
+</form>
+<br>
+	<br>
 Your search results are:
 
 		{% for result in results %}
@@ -11,14 +18,24 @@ Your search results are:
 			    Motto: {{ result["strapline"] }}<br>
 			<form action="/nonprofit_click" method="POST">
 				<input type="hidden" name="beneficiaryName" value={{ result["beneficiaryName"] }}>
-				<input type= "hidden" name="categories" value={{ result['categories']}}>
+				<input type= "hidden" name="categories" value={{ result['categories'] }}>
 				<input type= "hidden" name="permalink" value={{ result["permalink"] }}>
 				<input type= "hidden" name="beneficiaryId" value={{ result["beneficiaryId"] }}>
 				<input type= "hidden" name="strapline" value={{ result["strapline"] }}>
+				<input type= "hidden" name="country" value={{ result["country"] }}>
 				<input type="submit" value="More Info">
 			</form>
 		{% endfor %}
 
+		<h2>These were your previous searches:</h2>
+
+			{% for nonprofit in user_searches %}
+
+			<h3>{{ nonprofit.beneficiary_name }}</h3>
+			<p>{{ nonprofit.categories }}</p>
+
+
+			{% endfor %}
 
 
 	{% endblock %}

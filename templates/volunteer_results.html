@@ -1,7 +1,14 @@
 {% extends 'base.html' %}
 
 	{% block content %}
-
+<form action="/login" method="GET">
+	<input type="submit" value="Account page">
+</form>
+<form action="/logout" method="GET">
+	<input type="submit" value="Log Out">
+</form>
+<br>
+	<br>
 Your search results are:
 
 		{% for query in querys %}

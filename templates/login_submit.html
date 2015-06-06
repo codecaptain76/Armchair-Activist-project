@@ -1,14 +1,27 @@
 {% extends 'base.html' %}
 
-	{% block content %}
 
-		
+	{% block content %}
+<form action="/logout" method="GET">
+	<input type="submit" value="Log Out">
+</form>
+	<br>
+	<br>	
 
 	<p>Welcome {{ current_user.username }},<br>
-		Here is your recent activity:<br>
+		<br>
 <!-- show recent donations and volunteering times. When user submits donation or signs into volunteer times, keep track-->
-
-
-		
 </p>
+
+<h2>Search for nonprofits</h2>
+	<p><a href="/search">Discover opportunities</a></p>
+	
+
+	<h2>Volunteer Opportunties</h2>
+	<p><a href="/volunteer">Offer services</a></p> 
+
+
+
+
+
 		{% endblock %}
