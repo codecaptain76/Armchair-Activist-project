@@ -2,37 +2,73 @@
 <html>
 
 <head>
+	<link href='http://fonts.googleapis.com/css?family=Architects+Daughter|Permanent+Marker' rel='stylesheet' type='text/css'>
+	<title>Armchair Activist</title>
+	
+
 	<script src="https://code.jquery.com/jquery.js"></script>
-   <style>
-   		
+	
+	<style>
+		body {
+			background-image: url('/static/global_hands.jpg');
+			background-size: cover;                
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-attachment: fixed; 
+		}
+
+		
+		#main{
+			padding: 125px;
+			text-align: center;
+			font-family: 'Architects Daughter', cursive;
+		}	
+
+   		#header {
+   			padding-top: 75px;
+   			color: black;
+   			text-align: center;
+   			font-family: 'Permanent Marker', cursive;
+			}
 	 
 
+		#footer{
+			height: 100px;
+			text-align: center;
 
+		}
 
-	 	      .urgent {
-		        font-size: 100%;
-		        font-weight: bold;
-		      }
-		    </style>
+	</style>
 		   
 
     
-    <title>Armchair Activist</title>
+    
 </head>
  <body>
-  	
-  	<h1>Armchair Activist<h1>
-  	<h2>Welcome to the family<h2>
+<div id="container">
+	<div id="header">
+		<div style="font-family:'Permanent Marker', serif;"><h1>Armchair Activist</h1>	
+  		<h2>Welcome to the global family<h2>
+		
 
   		{% for flash in get_flashed_messages() %}
 		{{ flash }}
 		{% endfor %}
-		 
-	{% block content %}
+		</div>
+	</div>
 
-    {% endblock %}	
+		<div id="main">		 
+		{% block content %}
 
+    	{% endblock %}	
 
+		</div>
+
+	<div id="footer">
+		Copyright &copy; 2015 Keirra Hall.
+	</div>
+
+</div>	
  </body>
 
 		    

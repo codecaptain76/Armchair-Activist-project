@@ -1,7 +1,7 @@
 from jinja2 import StrictUndefined
 
 from flask import Flask, render_template, redirect, request, flash, session as browser_session
-#from flask_debugtoolbar import DebugToolbarExtension
+
 from secrets import amm_chain, all_chain
 import pprint
 
@@ -62,8 +62,6 @@ def nonprofit_click():
 	db.session.add(nonprofit)
 	db.session.commit()
 
-	# browser_session["user_id"] = user.id
-	# login_user(user)
 	#redirect to the permalink
 	return redirect(permalink)
 
@@ -179,12 +177,6 @@ def results():
 		return render_template('results.html', results=filtered_results, user_searches=user_searches)
 
 
-# @app.route("/donate", methods=['GET'])
-# def donate():
-
-
-# 	return render_template("donate.html")
-
 @app.route("/volunteer", methods=['GET'])
 def volunteer():
 	
@@ -217,30 +209,10 @@ def volunteer_results():
 
 			return render_template("volunteer_results.html", querys=combo_results)
 
-# @app.route('/zip_results')
-# def zipcode_results():
-# 	if 'zipcode' in request.args:
+@app.route('/account_page')
+def account_page():
 
-# 		zipcode = request.args['postalCode']
-
-# 		retrieve = requests.get(all_search_url+'&vol_loc='+zipcode+'&distance=25&category=&sort=&type=')
-
-# 		answers = retrieve.json()['answers']
-		
-# 		zip_results=[]
-
-# 		print str(retrieve[key]['title'])
-# 		print str(retrieve[key]['description'])
-# 		print str(retrieve[key]['startDate'])
-# 		print str(retrieve[key]['endDate'])
-# 		print str(retrieve[key]['contactPhone'])
-# 		print str(retrieve[key]['contactName'])
-# 		print str(retrieve[key]['contactEmail'])
-# 		print str(retrieve[key]['locationName'])
-
-# 		zip_results.append(retrieve[key])	
-
-# 	return render_template("volunteer_results.html", querys= zip_results)
+	return render_template("login_submit.html")
 
 @app.route('/logout')
 def logout():

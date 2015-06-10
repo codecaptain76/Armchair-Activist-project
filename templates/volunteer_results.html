@@ -1,20 +1,30 @@
 {% extends 'base.html' %}
 
 	{% block content %}
-<form action="/login" method="GET">
-	<input type="submit" value="Account page">
-</form>
+	<style>
+		body {
+			background-image: url('/static/volunteer_hands.jpg');
+			background-size: cover;                
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-attachment: fixed;
+		}
+		</style>
+<form action="/account_page" method="GET">
+	<button style="font:bold 20px Architects Daughter">Return to search</button></form>
+
 <form action="/logout" method="GET">
-	<input type="submit" value="Log Out">
-</form>
+	<button style="font:bold 20px Architects Daughter">Log Out</button></form>
+
 <br>
 	<br>
-Your search results are:
+<div id="main">	
+<h1>Your search results are:</h1>
 
 		{% for query in querys %}
 			<br>
 			
-			<p>{{ query["title"] }}<br>
+			<p><h2>{{ query["title"] }}<br>
 			   {{ query["description"] }}<br> 
 			   {{ query["startDate"] }}<br>
 			   {{ query["endDate"] }}
@@ -22,9 +32,10 @@ Your search results are:
 					<br>
 					Give my time
 				</a>		
-						 </p>
+						</h2></p>
+
 		{% endfor %}
 
 
-
+</div>
 	{% endblock %}

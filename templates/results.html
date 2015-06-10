@@ -1,21 +1,31 @@
 {% extends 'base.html' %}
 
 	{% block content %}
-<form action="/login" method="GET">
-	<input type="submit" value="Account page">
+	<style>
+		body {
+			background-image: url('/static/donation_hands.jpg');
+			background-size: cover;                
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-attachment: fixed; 
+		}
+		</style>
+<form action="/account_page" method="GET">
+	<button style="font:bold 20px Architects Daughter">Return to search</button>
 </form>
 <form action="/logout" method="GET">
-	<input type="submit" value="Log Out">
+	<button style="font:bold 20px Architects Daughter">Log Out</button>
 </form>
 <br>
 	<br>
-Your search results are:
+<h1>Your search results are:
 
-		{% for result in results %}
+		{% for result in results %}</h1>
 			<br>
 			
-			<p>{{ result["beneficiaryName"] }}<br>
-			    Motto: {{ result["strapline"] }}<br>
+			<p>
+				<h2>{{ result["beneficiaryName"] }}</h2>
+			    <br>
 			<form action="/nonprofit_click" method="POST">
 				<input type="hidden" name="beneficiaryName" value={{ result["beneficiaryName"] }}>
 				<input type= "hidden" name="categories" value={{ result['categories'] }}>
@@ -23,16 +33,16 @@ Your search results are:
 				<input type= "hidden" name="beneficiaryId" value={{ result["beneficiaryId"] }}>
 				<input type= "hidden" name="strapline" value={{ result["strapline"] }}>
 				<input type= "hidden" name="country" value={{ result["country"] }}>
-				<input type="submit" value="More Info">
+				<button style="font:bold 20px Architects Daughter">More Info</button>
 			</form>
 		{% endfor %}
 
-		<h2>These were your previous searches:</h2>
+		<h1>These were your previous searches:</h1>
 
 			{% for nonprofit in user_searches %}
 
-			<h3>{{ nonprofit.beneficiary_name }}</h3>
-			<p>{{ nonprofit.categories }}</p>
+			<h2>{{ nonprofit.beneficiary_name }}</h2>
+			<p><h3>{{ nonprofit.categories }}</h3></p>
 
 
 			{% endfor %}
