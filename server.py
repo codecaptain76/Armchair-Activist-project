@@ -233,7 +233,7 @@ def load_user(userid):
 if __name__ == '__main__':
 
 
-	app.debug = True
+	app.debug = False
 
 	#DebugToolbarExtension(app)
 	connect_to_db(app)
