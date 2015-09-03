@@ -3,6 +3,8 @@
 
 Armchair Activist was created by giving myself "The 5 click challenge". I wanted to create an application to make giving back to the community as easy as possible for the user. By limiting the interface to 5 clicks, a user can go from start to finish in a timeframe that is smaller than a commercial break. This allows the user to have no excuse to change the world. Armchair Activist lets users join the global community through technology. It is an application that allows individuals who are interested in giving back to the community, an opportunity to discover nonprofits that may be inspiring to them. It allows users to search by category and zip code, to identify causes that they may want to become involved with. Through this web application, the public will be able to donate directly to the charity of their choice or discover and join volunteer opportunities in their local area. Not everyone can protest on the front lines, but anyone can be an Armchair Activist. 
 
+The symbolism of hands is used throughout the site to convey the idea of unity and community. Whether you are giving to, receiving from, or connecting with someone, the hands are always the utilized.  
+
 # Technology Stack: 
 Python, Flask, Flask-login, Html, Javascript, Jinja, SQLAlchemy, SQLite, CSS
 
