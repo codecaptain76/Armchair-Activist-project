@@ -13,4 +13,4 @@ Ammado (global donations), All for good (volunteer resources)
 Armchair Activist lets users create an account and log in, to begin searching for nonprofits to donate to by keyword. The users information, as well as their search history are stored in the database using SQLite and SQLAlchemy. The donation search uses the "Ammado" API. The search results are displayed by the name of the nonprofit. Once the user chooses a nonprofit, they are directed to Ammado's site to the nonprofit's homepage for more information. There they can push a button to donate directly to the charity of choice, using multiple types of payments, as well as being able to set up single or repeat donation.
 Also, by using the "All for good" API, individuals are able to conduct a more specific search of nonprofits by keyword as well as zipcode. This allows users to peruse the home page of the nonprofit for more information, and decide whether or not to give their time. Which they may choose to sign up for a shift directly from the site.
 
-
+![search results](https://cloud.githubusercontent.com/assets/11415852/9655816/abe1afa6-51e8-11e5-8a47-0ebbd55a3e8d.png)
